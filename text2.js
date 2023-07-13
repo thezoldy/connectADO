@@ -4,35 +4,26 @@ const Organization = 'EMIT-FLCIT'
 const Project = 'Fuels%20IT'
 const azureDevOpsURL = `https://analytics.dev.azure.com/${Organization}/${Project}`
 
-// function consult to a query
+// function consult to a query 
 async function fetchData() {
-  /*  const params = [   //queryone
-      'Depth eq 2 and StartDate ne null',
-      'IterationName,StartDate,EndDate',
-      'StartDate'
-  ] */
-  const params = [  //querytwo
-    "IterationLevel3 eq '2023 I2' and IterationLevel2 eq '2023' and Depth eq 3 and StartDate ne null",
-    'IterationLevel2,IterationName,StartDate,EndDate',
-    'StartDate'
-  ]
-  const method = 'Iterations'
-  const url = `${azureDevOpsURL}/_odata/v3.0/${method}/?$filter=${params[0]}&$select=${params[1]}&$orderby=${params[2]}`
+/*   const param = "WorkItemType in ('User Story', 'Bug') and State in ('Ready to Release', 'Done', 'Closed') and Iteration/IterationLevel3 eq '2023 I2' and Iteration/IterationLevel2 eq '2023' and contains(Area/AreaPath, 'Fuels IT\\Trading\\CT\\Trading Americas'))/groupby((Iteration/IterationLevel4), aggregate(StoryPoints with sum as StoryPoints)" */
+  const param = "AreaLevel1 eq 'Fuels IT' and AreaLevel2 eq 'Trading'"
+  const method = 'Areas'
+  const url = `${azureDevOpsURL}/_odata/v3.0/${method}?$apply=filter(${param})`
   const auth = {
     username: "",
     password: "" //putyourtokenherepls
   }
-
   try {
     if(auth.password==""){
-      window.alert("Fill out the field 'accessToken' in text.js")}
+        window.alert("Fill out the field 'accessToken' in text2.js")}
     const response = await axios.get(url, {
       headers: {
-        'Content-Type': 'application/json', 
-        'Authorization': "Basic " + window.btoa(":" + auth.password) //converting password in base64
+        'Content-Type': 'application/json',
+        'Authorization': "Basic " + window.btoa(":" + auth.password)
       }
     });
-    const data = response.data; //acessing .json 
+    const data = response.data;
     return data;
   } catch (error) {
     console.error('Error 401', error);
